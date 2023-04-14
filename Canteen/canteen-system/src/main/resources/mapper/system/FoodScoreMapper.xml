@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.canteen.system.mapper.FoodScoreMapper">
+    
+    <resultMap type="FoodScore" id="FoodScoreResult">
+        <result property="ID"    column="ID"    />
+        <result property="foodId"    column="food_id"    />
+        <result property="foodName"    column="food_name"    />
+        <result property="shopName"    column="shop_name"    />
+        <result property="csScore"    column="cs_score"    />
+        <result property="cpScore"    column="cp_score"    />
+        <result property="jgScore"    column="jg_score"    />
+        <result property="wsScore"    column="ws_score"    />
+        <result property="userName"    column="user_name"    />
+    </resultMap>
+
+    <sql id="selectFoodScoreVo">
+        select ID, food_id, food_name, shop_name, cs_score, cp_score, jg_score, ws_score, user_name from food_score
+    </sql>
+
+    <select id="selectFoodScoreList" parameterType="FoodScore" resultMap="FoodScoreResult">
+        <include refid="selectFoodScoreVo"/>
+        <where>  
+            <if test="foodName != null  and foodName != ''"> and food_name like concat('%', #{foodName}, '%')</if>
+            <if test="shopName != null  and shopName != ''"> and shop_name like concat('%', #{shopName}, '%')</if>
+            <if test="foodId != null  and foodId != ''"> and food_id = #{foodId}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectFoodScoreByID" parameterType="Long" resultMap="FoodScoreResult">
+        <include refid="selectFoodScoreVo"/>
+        where ID = #{ID}
+    </select>
+        
+    <insert id="insertFoodScore" parameterType="FoodScore">
+        insert into food_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="foodId != null">food_id,</if>
+            <if test="foodName != null">food_name,</if>
+            <if test="shopName != null">shop_name,</if>
+            <if test="csScore != null">cs_score,</if>
+            <if test="cpScore != null">cp_score,</if>
+            <if test="jgScore != null">jg_score,</if>
+            <if test="wsScore != null">ws_score,</if>
+            <if test="userName != null">user_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="foodId != null">#{foodId},</if>
+            <if test="foodName != null">#{foodName},</if>
+            <if test="shopName != null">#{shopName},</if>
+            <if test="csScore != null">#{csScore},</if>
+            <if test="cpScore != null">#{cpScore},</if>
+            <if test="jgScore != null">#{jgScore},</if>
+            <if test="wsScore != null">#{wsScore},</if>
+            <if test="userName != null">#{userName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFoodScore" parameterType="FoodScore">
+        update food_score
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="foodId != null">food_id = #{foodId},</if>
+            <if test="foodName != null">food_name = #{foodName},</if>
+            <if test="shopName != null">shop_name = #{shopName},</if>
+            <if test="csScore != null">cs_score = #{csScore},</if>
+            <if test="cpScore != null">cp_score = #{cpScore},</if>
+            <if test="jgScore != null">jg_score = #{jgScore},</if>
+            <if test="wsScore != null">ws_score = #{wsScore},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+        </trim>
+        where ID = #{ID}
+    </update>
+
+    <delete id="deleteFoodScoreByID" parameterType="Long">
+        delete from food_score where ID = #{ID}
+    </delete>
+
+    <delete id="deleteFoodScoreByIDs" parameterType="String">
+        delete from food_score where ID in 
+        <foreach item="ID" collection="array" open="(" separator="," close=")">
+            #{ID}
+        </foreach>
+    </delete>
+</mapper>

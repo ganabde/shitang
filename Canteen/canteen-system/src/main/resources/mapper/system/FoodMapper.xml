@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.canteen.system.mapper.FoodMapper">
+    
+    <resultMap type="Food" id="FoodResult">
+        <result property="foodId"    column="food_id"    />
+        <result property="foodName"    column="food_name"    />
+        <result property="foodPrice"    column="food_price"    />
+        <result property="foodPicture"    column="food_picture"    />
+        <result property="foodMsg"    column="food_msg"    />
+        <result property="foodStatus"    column="food_status"    />
+        <result property="businessName"    column="business_name"    />
+        <result property="businessId"    column="business_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectFoodVo">
+        select food_id, food_name, food_price, food_picture, food_msg, food_status, business_name, business_id, create_time, update_time from food
+    </sql>
+
+    <select id="selectFoodList" parameterType="Food" resultMap="FoodResult">
+        select
+        f.food_id,
+        f.food_name,
+        f.food_price,
+        f.food_picture,
+        f.food_msg,
+        f.food_status,
+        b.shop_name as business_name ,
+        f.business_id,
+        f.create_time,
+        f.update_time
+        from food f
+        INNER join sys_user u on f.business_id = u.user_id
+        INNER JOIN business b on b.business_id = f.business_id
+        <where>
+            <if test="foodName != null  and foodName != ''"> and food_name like concat('%', #{foodName}, '%')</if>
+            <if test="foodStatus != null  and foodStatus != ''"> and food_status = #{foodStatus}</if>
+        </where>
+        ${params.dataScope}
+    </select>
+
+    <select id="getFoodList" parameterType="Food" resultMap="FoodResult">
+        SELECT
+            f.food_id,
+            f.food_name,
+            f.food_price,
+            f.food_picture,
+            f.food_msg,
+            f.food_status,
+            b.shop_name as business_name ,
+            f.business_id,
+            f.create_time,
+            f.update_time
+        FROM
+            food f
+            INNER JOIN business b on b.business_id = f.business_id
+        <where>
+            f.food_status = "1"
+            <if test="foodName != null  and foodName != ''"> and food_name like concat('%', #{foodName}, '%')</if>
+        </where>
+
+    </select>
+    
+    <select id="selectFoodByFoodId" parameterType="Long" resultMap="FoodResult">
+        <include refid="selectFoodVo"/>
+        where food_id = #{foodId}
+    </select>
+        
+    <insert id="insertFood" parameterType="Food">
+        insert into food
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="foodId != null">food_id,</if>
+            <if test="foodName != null and foodName != ''">food_name,</if>
+            <if test="foodPrice != null">food_price,</if>
+            <if test="foodPicture != null and foodPicture != ''">food_picture,</if>
+            <if test="foodMsg != null">food_msg,</if>
+            <if test="foodStatus != null and foodStatus != ''">food_status,</if>
+            <if test="businessName != null and businessName != ''">business_name,</if>
+            <if test="businessId != null">business_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="foodId != null">#{foodId},</if>
+            <if test="foodName != null and foodName != ''">#{foodName},</if>
+            <if test="foodPrice != null">#{foodPrice},</if>
+            <if test="foodPicture != null and foodPicture != ''">#{foodPicture},</if>
+            <if test="foodMsg != null">#{foodMsg},</if>
+            <if test="foodStatus != null and foodStatus != ''">#{foodStatus},</if>
+            <if test="businessName != null and businessName != ''">#{businessName},</if>
+            <if test="businessId != null">#{businessId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFood" parameterType="Food">
+        update food
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="foodName != null and foodName != ''">food_name = #{foodName},</if>
+            <if test="foodPrice != null">food_price = #{foodPrice},</if>
+            <if test="foodPicture != null and foodPicture != ''">food_picture = #{foodPicture},</if>
+            <if test="foodMsg != null">food_msg = #{foodMsg},</if>
+            <if test="foodStatus != null and foodStatus != ''">food_status = #{foodStatus},</if>
+            <if test="businessName != null and businessName != ''">business_name = #{businessName},</if>
+            <if test="businessId != null">business_id = #{businessId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where food_id = #{foodId}
+    </update>
+
+    <delete id="deleteFoodByFoodId" parameterType="Long">
+        delete from food where food_id = #{foodId}
+    </delete>
+
+
+    <delete id="deleteFoodByFoodIds" parameterType="String">
+        delete from food where food_id in 
+        <foreach item="foodId" collection="array" open="(" separator="," close=")">
+            #{foodId}
+        </foreach>
+    </delete>
+
+    <update id="updateStatus" parameterType="String">
+        update  food
+        set food_status = "1"
+        where food_id in
+        <foreach item="foodId" collection="array" open="(" separator="," close=")">
+            #{foodId}
+        </foreach>
+    </update>
+</mapper>

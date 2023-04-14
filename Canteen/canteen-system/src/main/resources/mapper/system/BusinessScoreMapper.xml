@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.canteen.system.mapper.BusinessScoreMapper">
+    
+    <resultMap type="BusinessScore" id="BusinessScoreResult">
+        <result property="ID"    column="ID"    />
+        <result property="businessId"    column="business_id"    />
+        <result property="businessName"    column="business_name"    />
+        <result property="userName"    column="user_name"    />
+        <result property="userId"    column="user_id"    />
+        <result property="fwScore"    column="fw_score"    />
+        <result property="wsScore"    column="ws_score"    />
+        <result property="yrybScore"    column="yryb_score"    />
+        <result property="clScore"    column="cl__score"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBusinessScoreVo">
+        select ID, business_id, business_name, user_name, user_id, fw_score, ws_score, yryb_score, cl__score, create_time from business_score
+    </sql>
+
+    <select id="selectBusinessScoreList" parameterType="BusinessScore" resultMap="BusinessScoreResult">
+        <include refid="selectBusinessScoreVo"/>
+        <where>  
+            <if test="businessName != null  and businessName != ''"> and business_name like concat('%', #{businessName}, '%')</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="businessId != null  and businessId != ''"> and business_id = #{businessId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusinessScoreByID" parameterType="Long" resultMap="BusinessScoreResult">
+        <include refid="selectBusinessScoreVo"/>
+        where ID = #{ID}
+    </select>
+        
+    <insert id="insertBusinessScore" parameterType="BusinessScore">
+        insert into business_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ID != null">ID,</if>
+            <if test="businessId != null">business_id,</if>
+            <if test="businessName != null">business_name,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="fwScore != null">fw_score,</if>
+            <if test="wsScore != null">ws_score,</if>
+            <if test="yrybScore != null">yryb_score,</if>
+            <if test="clScore != null">cl__score,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ID != null">#{ID},</if>
+            <if test="businessId != null">#{businessId},</if>
+            <if test="businessName != null">#{businessName},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="fwScore != null">#{fwScore},</if>
+            <if test="wsScore != null">#{wsScore},</if>
+            <if test="yrybScore != null">#{yrybScore},</if>
+            <if test="clScore != null">#{clScore},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusinessScore" parameterType="BusinessScore">
+        update business_score
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="businessId != null">business_id = #{businessId},</if>
+            <if test="businessName != null">business_name = #{businessName},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="fwScore != null">fw_score = #{fwScore},</if>
+            <if test="wsScore != null">ws_score = #{wsScore},</if>
+            <if test="yrybScore != null">yryb_score = #{yrybScore},</if>
+            <if test="clScore != null">cl__score = #{clScore},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where ID = #{ID}
+    </update>
+
+    <delete id="deleteBusinessScoreByID" parameterType="Long">
+        delete from business_score where ID = #{ID}
+    </delete>
+
+    <delete id="deleteBusinessScoreByIDs" parameterType="String">
+        delete from business_score where ID in 
+        <foreach item="ID" collection="array" open="(" separator="," close=")">
+            #{ID}
+        </foreach>
+    </delete>
+</mapper>

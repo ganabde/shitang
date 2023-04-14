@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/Canteen/canteen-admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/canteen-admin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/canteen-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/canteen-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/canteen-framework/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/canteen-framework/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/canteen-generator/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/canteen-generator/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/canteen-quartz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/canteen-quartz/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/canteen-system/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/canteen-system/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Canteen/src/main/resources" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

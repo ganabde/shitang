@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.canteen.system.mapper.MsgMapper">
+    
+    <resultMap type="Msg" id="MsgResult">
+        <result property="msgId"    column="msg_id"    />
+        <result property="shopName"    column="shop_name"    />
+        <result property="businessId"    column="business_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="message"    column="message"    />
+    </resultMap>
+
+    <sql id="selectMsgVo">
+        select msg_id, shop_name, business_id, create_time, user_id, user_name, message from msg
+    </sql>
+
+    <select id="selectMsgList" parameterType="Msg" resultMap="MsgResult">
+        <include refid="selectMsgVo"/>
+        <where>  
+            <if test="shopName != null  and shopName != ''"> and shop_name like concat('%', #{shopName}, '%')</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="message != null  and message != ''"> and message like concat('%', #{message}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectMsgByMsgId" parameterType="Long" resultMap="MsgResult">
+        <include refid="selectMsgVo"/>
+        where msg_id = #{msgId}
+    </select>
+        
+    <insert id="insertMsg" parameterType="Msg">
+        insert into msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">msg_id,</if>
+            <if test="shopName != null">shop_name,</if>
+            <if test="businessId != null">business_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="message != null">message,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">#{msgId},</if>
+            <if test="shopName != null">#{shopName},</if>
+            <if test="businessId != null">#{businessId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="message != null">#{message},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMsg" parameterType="Msg">
+        update msg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopName != null">shop_name = #{shopName},</if>
+            <if test="businessId != null">business_id = #{businessId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="message != null">message = #{message},</if>
+        </trim>
+        where msg_id = #{msgId}
+    </update>
+
+    <delete id="deleteMsgByMsgId" parameterType="Long">
+        delete from msg where msg_id = #{msgId}
+    </delete>
+
+    <delete id="deleteMsgByMsgIds" parameterType="String">
+        delete from msg where msg_id in 
+        <foreach item="msgId" collection="array" open="(" separator="," close=")">
+            #{msgId}
+        </foreach>
+    </delete>
+</mapper>
